@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Producto;
+use App\Models\Categoria;
 
 class ProductoController extends Controller
 {
@@ -15,7 +16,11 @@ class ProductoController extends Controller
 
     public function create()
     {
-        return view('productos.create');
+          // Obtener todas las categorías
+    $categorias = Categoria::all();
+    
+    // Pasar las categorías a la vista
+    return view('productos.create', compact('categorias'));
     }
 
     public function store(Request $request)
@@ -23,13 +28,13 @@ class ProductoController extends Controller
         $request->validate([
             'name' => 'required|string|min:5|max:100',
             'description' => 'required|string|min:1',
-            'category' => 'required|string',
-            'price' => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/', // valida que el precio sea numérico con hasta 2 decimales
+            'category_id' => 'required|exists:categorias,id',
+            'price' => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/',
             'quantity' => 'required|integer',
-            'description' => 'required|string',
+            'sku' => 'required|string',
             'image' => 'required|string'
         ]);
-
+    
         Producto::create($request->all());
         return redirect()->route('productos.index');
     }
@@ -42,8 +47,8 @@ class ProductoController extends Controller
     public function edit(string $id)
     {
         $producto = Producto::findOrFail($id);
-
-        return view('productos.edit', compact('producto'));
+        $categorias = Categoria::all();
+        return view('productos.edit', compact('producto', 'categorias'));
     }
 
    
@@ -52,13 +57,13 @@ class ProductoController extends Controller
         $request->validate([
             'name' => 'required|string|min:5|max:100',
             'description' => 'required|string|min:1',
-            'category' => 'required|string',
-            'price' => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/', // valida que el precio sea numérico con hasta 2 decimales
+            'category_id' => 'required|exists:categorias,id',
+            'price' => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/',
             'quantity' => 'required|integer',
-            'description' => 'required|string',
+            'sku' => 'required|string',
             'image' => 'required|string'
         ]);
-
+    
         $producto = Producto::findOrFail($id);
         $producto->update($request->all());
         return redirect()->route('productos.index');

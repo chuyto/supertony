@@ -28,9 +28,14 @@
 
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
                             <div>
-                                <label for="category" class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-200">Categoria</label>
+                                <label for="category_id" class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-200">Categoria</label>
                                 <div class="mt-2">
-                                    <input type="text" name="category" id="category" class="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-700 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" placeholder="Categoria">
+                                    <select name="category_id" id="category_id" class="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-700 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                                        <option value="">Selecciona una categoría</option>
+                                        @foreach($categorias as $categoria)
+                                            <option value="{{ $categoria->id }}">{{ $categoria->categoria }}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
                             <div>
