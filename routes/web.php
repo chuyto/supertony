@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\PosController;
+use App\Http\Controllers\ChartController;
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -20,6 +22,8 @@ Route::middleware([
 
     Route::resource('productos', ProductoController::class);
     Route::resource('categorias', CategoriaController::class);
+
+    Route::get('/chart', [ChartController::class, 'index'])->name('dashboard.index');
 
     // Ruta para la búsqueda del producto por SKU
     Route::get('/pos/search', [PosController::class, 'searchProduct'])->name('pos.search');
