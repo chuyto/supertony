@@ -8,6 +8,7 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg">
+                @hasanyrole('administrador|gerente')
                 <div class="bg-gray-900">
                     <div class="mx-auto max-w-7xl">
                         <div class="bg-white py-10">
@@ -36,12 +37,12 @@
                                                   <tr id="categoria-{{ $categoria->id }}">
                                                       <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">{{ $categoria->id }}</td>
                                                       <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-900">{{ $categoria->categoria }}</td>
-                                                     
+
                                                       <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-300">
                                                           <div class="flex justify-center">
-                                                            <a href="{{ route('categorias.edit', $categoria->id) }}" 
-                                                              class="block rounded-md bg-indigo-500 px-3 py-2 text-center text-sm font-semibold text-white hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"                                                              
-                                                              >Editar</a>  
+                                                            <a href="{{ route('categorias.edit', $categoria->id) }}"
+                                                              class="block rounded-md bg-indigo-500 px-3 py-2 text-center text-sm font-semibold text-white hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
+                                                              >Editar</a>
                                                             <button type="button" onclick="confirmDelete('{{ $categoria->id }}')" class="ml-4 inline-flex items-center rounded-md bg-red-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
                                                                   Eliminar
                                                               </button>
@@ -116,51 +117,54 @@
                         </div>
                     </div>
                 </div>
+                @else
+                <script>
+                    window.location.href = "{{ route('pos.index') }}";
+                </script>
+                @endhasanyrole
             </div>
         </div>
     </div>
-    <script>
-      function confirmDelete(id) {
-          document.getElementById('confirmationModal').classList.remove('hidden');
-          document.getElementById('confirmDeleteButton').onclick = function () {
-              deleteCategoria(id);
-          };
-      }
-  
-      function closeModal() {
-          document.getElementById('confirmationModal').classList.add('hidden');
-      }
-  
-      function deleteCategoria(id) {
-          fetch(`/categorias/${id}`, {
-              method: 'DELETE',
-              headers: {
-                  'Content-Type': 'application/json',
-                  'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-              },
-              body: JSON.stringify({ _method: 'DELETE' }),
-          })
-          .then(response => response.json())
-          .then(data => {
-              if (data.success) {
-                  // Actualizar la tabla
-                  document.querySelector(`#categoria-${id}`).remove();
-                  
-                  // Mostrar notificación de éxito
-                  document.getElementById('successNotification').classList.remove('hidden');
-                  setTimeout(() => {
-                      document.getElementById('successNotification').classList.add('hidden');
-                  }, 3000);
-              } else {
-                  // Manejo de error si es necesario
-              }
-              closeModal();
-          })
-          .catch(error => {
-              console.error('Error:', error);
-              closeModal();
-          });
-      }
-  </script>
-  
 </x-app-layout>
+
+<script>
+    function confirmDelete(categoriaId) {
+        const confirmationModal = document.getElementById('confirmationModal');
+        const confirmDeleteButton = document.getElementById('confirmDeleteButton');
+
+        confirmationModal.classList.remove('hidden');
+        confirmDeleteButton.onclick = function() {
+            deleteCategoria(categoriaId);
+            closeModal();
+        };
+    }
+
+    function closeModal() {
+        const confirmationModal = document.getElementById('confirmationModal');
+        confirmationModal.classList.add('hidden');
+    }
+
+    function deleteCategoria(categoriaId) {
+        fetch(`/categorias/${categoriaId}`, {
+            method: 'DELETE',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            }
+        })
+        .then(response => {
+            if (response.ok) {
+                const categoriaRow = document.getElementById(`categoria-${categoriaId}`);
+                categoriaRow.remove();
+
+                const successNotification = document.getElementById('successNotification');
+                successNotification.classList.remove('hidden');
+                setTimeout(() => {
+                    successNotification.classList.add('hidden');
+                }, 3000);
+            } else {
+                console.error('Failed to delete categoria');
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    }
+</script>

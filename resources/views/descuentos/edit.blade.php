@@ -8,9 +8,20 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg">
+                @hasanyrole('administrador|gerente')
                 <form method="POST" action="{{ route('descuentos.update', $descuento->id) }}">
                     @csrf
                     @method('PUT')
+
+                    @if ($errors->any())
+                        <div class="bg-red-100 text-red-700 p-4 rounded-md">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
 
                     <div class="px-6 py-4">
                         <div class="mb-4">
@@ -36,10 +47,11 @@
 
                         <div class="mb-4">
                             <label for="is_active" class="flex items-center">
-                                <input type="checkbox" name="is_active" id="is_active" {{ old('is_active', $descuento->is_active) ? 'checked' : '' }} class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50">
+                                <input type="checkbox" name="is_active" id="is_active" {{ old('is_active', $descuento->is_active) ? 'checked' : '' }} value="1" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50">
                                 <span class="ml-2 text-sm text-gray-900 dark:text-gray-200">Activo</span>
                             </label>
                         </div>
+
 
                         <div class="flex items-center justify-end mt-4">
                             <button type="submit" class="inline-flex items-center rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600">
@@ -51,6 +63,11 @@
                         </div>
                     </div>
                 </form>
+                @else
+                <script>
+                    window.location.href = "{{ route('pos.index') }}";
+                </script>
+                @endhasanyrole
             </div>
         </div>
     </div>

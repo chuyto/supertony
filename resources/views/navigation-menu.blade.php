@@ -18,19 +18,22 @@
                 <!-- Navigation Links -->
                 <!-- Navigation Links -->
 <div class="hidden sm:flex sm:items-center sm:ms-10 space-x-8">
+    @hasanyrole('administrador')
     <x-nav-link href="{{ route('dashboard.index') }}" :active="request()->routeIs('dashboard.index')">
         {{ __('Dashboard') }}
     </x-nav-link>
-
+    @endhasanyrole
+    @hasanyrole('administrador|gerente')
     <x-nav-link href="{{ route('productos.index') }}" :active="request()->routeIs('productos.index')">
         {{ __('Productos') }}
     </x-nav-link>
-
+    @endhasanyrole
     {{-- <x-nav-link href="{{ route('categorias.index') }}" :active="request()->routeIs('categorias.index')">
         {{ __('Categorias') }}
     </x-nav-link> --}}
 
     <!-- Dropdown Menu -->
+    @hasanyrole('administrador|gerente')
     <div class="ms-3 relative">
         <x-dropdown align="right" width="48">
             <x-slot name="trigger">
@@ -58,12 +61,16 @@
             </x-slot>
         </x-dropdown>
     </div>
+    @endhasanyrole
     <x-nav-link href="{{ route('pos.index') }}" :active="request()->routeIs('pos.index')">
         {{ __('Venta') }}
     </x-nav-link>
+    @hasanyrole('administrador|gerente')
     <x-nav-link href="{{ route('devoluciones.index') }}" :active="request()->routeIs('devoluciones.index')">
         {{ __('Devoluciones') }}
     </x-nav-link>
+    @endhasanyrole
+    @hasanyrole('administrador|gerente')
     <div class="ms-3 relative">
         <x-dropdown align="right" width="48">
             <x-slot name="trigger">
@@ -91,6 +98,7 @@
             </x-slot>
         </x-dropdown>
     </div>
+    @endhasanyrole
 </div>
 
             </div>
@@ -178,9 +186,17 @@
                             <x-dropdown-link href="{{ route('profile.show') }}">
                                 {{ __('Profile') }}
                             </x-dropdown-link>
+                            @hasanyrole('administrador')
                             <x-dropdown-link href="{{ route('settings.index') }}">
                                 {{ __('Configuración') }}
                             </x-dropdown-link>
+                            @endhasanyrole
+
+                            @hasanyrole('administrador')
+                            <x-dropdown-link href="{{ route('users.index') }}">
+                                {{ __('Usuarios') }}
+                            </x-dropdown-link>
+                            @endhasanyrole
 
                             @if (Laravel\Jetstream\Jetstream::hasApiFeatures())
                                 <x-dropdown-link href="{{ route('api-tokens.index') }}">
@@ -219,32 +235,37 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
+            @hasanyrole('administrador|')
             <x-responsive-nav-link href="{{ route('dashboard.index') }}" :active="request()->routeIs('dashboard.index')">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
+            @endhasanyrole
+            @hasanyrole('administrador|gerente')
             <x-responsive-nav-link href="{{ route('productos.index') }}" :active="request()->routeIs('productos.index')">
                 {{ __('Productos') }}
             </x-responsive-nav-link>
+            @endhasanyrole
             {{-- <x-responsive-nav-link href="{{ route('categorias.index') }}" :active="request()->routeIs('categorias.index')">
                 {{ __('Categorias') }}
             </x-responsive-nav-link> --}}
             <x-responsive-nav-link href="{{ route('pos.index') }}" :active="request()->routeIs('pos.index')">
                 {{ __('Venta') }}
             </x-responsive-nav-link>
-
-            <!-- Responsive Dropdown Menu -->
+            @hasanyrole('administrador|gerente')
+           <!-- Responsive Dropdown Menu -->
             <div class="border-t border-gray-200 dark:border-gray-600"></div>
             <div class="pt-2 pb-3 space-y-1">
                 <x-responsive-nav-link href="{{ route('categorias.index') }}">
-                    {{ __('Categorias') }}
+                    {{ __('Categorías') }}
                 </x-responsive-nav-link>
-                {{-- <x-responsive-nav-link href="{{ route('some.route2') }}">
-                    {{ __('Opción 2') }}
+                <x-responsive-nav-link href="{{ route('descuentos.index') }}">
+                    {{ __('Descuentos') }}
                 </x-responsive-nav-link>
-                <x-responsive-nav-link href="{{ route('some.route3') }}">
-                    {{ __('Opción 3') }}
-                </x-responsive-nav-link> --}}
+                <x-responsive-nav-link href="{{ route('devoluciones.index') }}">
+                    {{ __('Devoluciones') }}
+                </x-responsive-nav-link>
             </div>
+            @endhasanyrole
         </div>
 
         <!-- Responsive Settings Options -->

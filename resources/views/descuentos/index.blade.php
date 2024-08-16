@@ -8,6 +8,8 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg">
+                 <!-- Restricción por roles -->
+                 @hasanyrole('administrador|gerente')
                 <div class="bg-gray-900">
                     <div class="mx-auto max-w-7xl">
                         <div class="bg-white py-10">
@@ -31,6 +33,7 @@
                                                         <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Nombre</th>
                                                         <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Porcentaje</th>
                                                         <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Fecha de Expiración</th>
+                                                        <th scope="col" class="px-3 py-3.5 text-center text-sm font-semibold text-gray-900">Activo</th>
                                                         <th scope="col" class="px-3 py-3.5 text-center text-sm font-semibold text-gray-900">Acciones</th>
                                                     </tr>
                                                 </thead>
@@ -41,6 +44,7 @@
                                                         <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-900">{{ $descuento->name }}</td>
                                                         <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-900">{{ $descuento->percentage }}%</td>
                                                         <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-900">{{ $descuento->expiration }}</td>
+                                                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-900">{{ $descuento->is_active ? 'Si' : 'No' }}</td>
                                                         <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-900">
                                                             <div class="flex justify-center">
                                                                 <a href="{{ route('descuentos.edit', $descuento->id) }}"
@@ -120,6 +124,11 @@
                         </div>
                     </div>
                 </div>
+                @else
+                <script>
+                    window.location.href = "{{ route('pos.index') }}";
+                </script>
+                @endhasanyrole
             </div>
         </div>
     </div>

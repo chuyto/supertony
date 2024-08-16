@@ -41,7 +41,7 @@ class ReportController extends Controller
         // $logoUrl = Storage::url($logoPath);
 
 
-        $pdf = Pdf::loadView('reportes.ventas_pdf', compact('ventas', 'startDate', 'endDate', 'logoUrl'));
+        $pdf = Pdf::loadView('reportes.ventas_pdf', compact('ventas', 'startDate', 'endDate'));
         return $pdf->download('ventas_'.$startDate.'_a_'.$endDate.'.pdf');
     }
 
@@ -55,7 +55,7 @@ class ReportController extends Controller
         $logoUrl = Storage::url($logoPath);
 
         // Carga la vista HTML para el reporte
-        $pdf = Pdf::loadView('reportes.inventario', compact('productos', 'logoUrl'));
+        $pdf = Pdf::loadView('reportes.inventario', compact('productos'));
 
         // Genera el archivo PDF y lo descarga
         return $pdf->download('inventario.pdf');

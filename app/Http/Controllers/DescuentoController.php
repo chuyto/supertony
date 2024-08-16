@@ -51,7 +51,7 @@ class DescuentoController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'percentage' => 'required|numeric',
+            'percentage' => 'required|numeric|min:0',
             'expiration' => 'required|date',
             'is_active' => 'nullable|boolean',
         ]);
@@ -60,11 +60,12 @@ class DescuentoController extends Controller
         $descuento->name = $request->input('name');
         $descuento->percentage = $request->input('percentage');
         $descuento->expiration = $request->input('expiration');
-        $descuento->is_active = $request->has('is_active');
+        $descuento->is_active = $request->has('is_active'); // Si el checkbox está marcado, se establece en true, de lo contrario, false.
         $descuento->save();
 
         return redirect()->route('descuentos.index')->with('success', 'Descuento actualizado con éxito.');
     }
+
 
     public function destroy(Descuento $descuento)
     {

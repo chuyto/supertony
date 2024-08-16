@@ -16,13 +16,30 @@ class DatabaseSeeder extends Seeder
             RolePermissionSeeder::class,
         ]);
 
+        // Crear usuarios y asignarles roles
 
-        // Crear usuario vendedor y asignarle el rol de vendedor
-        $vendedorUser = User::create([
-            'name' => 'Vendedor User',
-            'email' => 'vendedor@example.com',
+        // Usuario Administrador
+        $adminUser = User::create([
+            'name' => 'Admin User',
+            'email' => 'admin@example.com',
             'password' => bcrypt('password'),
         ]);
-        $vendedorUser->assignRole('vendedor');
+        $adminUser->assignRole('administrador');
+
+        // Usuario Gerente
+        $gerenteUser = User::create([
+            'name' => 'Gerente User',
+            'email' => 'gerente@example.com',
+            'password' => bcrypt('password'),
+        ]);
+        $gerenteUser->assignRole('gerente');
+
+        // Usuario Cajero
+        $cajeroUser = User::create([
+            'name' => 'Cajero User',
+            'email' => 'cajero@example.com',
+            'password' => bcrypt('password'),
+        ]);
+        $cajeroUser->assignRole('cajero');
     }
 }

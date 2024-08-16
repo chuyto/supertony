@@ -1,3 +1,4 @@
+@hasanyrole('administrador|gerente')
 <!DOCTYPE html>
 <html>
 <head>
@@ -54,3 +55,8 @@
     </table>
 </body>
 </html>
+@else
+<script>
+    window.location.href = "{{ route('pos.index') }}";
+</script>
+@endhasanyrole

@@ -1,0 +1,41 @@
+[33mcommit a8f3675187a289b515ab102ec9c9d79455f3cc97[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31msupertony/main[m[33m)[m
+Author: Arturo <jsanchez@aqm.mx>
+Date:   Thu Aug 15 20:38:55 2024 -0600
+
+    Versión Casi final
+
+[33mcommit da9320c29f9c02694d3953599ab511739a602365[m
+Author: Arturo <jsanchez@aqm.mx>
+Date:   Tue Jul 30 16:15:46 2024 -0600
+
+    Actualización 3
+
+[33mcommit 9e047026ed0ee95c7249ea7933a26e9602df43af[m
+Author: Arturo <jsanchez@aqm.mx>
+Date:   Sat Jul 27 08:17:56 2024 -0600
+
+    se agrego el componente de punto de venta
+
+[33mcommit dac60c0a36a13a3ad3f66006c4e5fa4680f7e6e0[m
+Author: Arturo <jsanchez@aqm.mx>
+Date:   Wed Jul 24 20:49:05 2024 -0600
+
+            new file:   resources/views/productos/edit.blade.php
+
+[33mcommit 3c762397f1b109dc41dd3b9dc2737b74f6edf0f6[m
+Author: Arturo <jsanchez@aqm.mx>
+Date:   Wed Jul 24 20:47:48 2024 -0600
+
+    Vista para crear, editar, eliminar y ver productos
+
+[33mcommit 3f92e387e7779c84b1959a5b2a918915b8d49257[m
+Author: Arturo <jsanchez@aqm.mx>
+Date:   Wed Jul 24 16:35:33 2024 -0600
+
+    Install Jetstream
+
+[33mcommit 29d5ead33d8a039b1299f9998a8f6c453f387b6e[m
+Author: Arturo <jsanchez@aqm.mx>
+Date:   Wed Jul 24 16:30:27 2024 -0600
+
+    Set up a fresh Laravel app
