@@ -55,7 +55,7 @@ class CategoriaController extends Controller
     {
         $categoria = Categoria::findOrFail($id);
         $categoria->delete();
-    
+
         // Devuelve una respuesta JSON
         return response()->json([
             'success' => true,

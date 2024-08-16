@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Descuentos List') }}
+            {{ __('Configuración') }}
         </h2>
     </x-slot>
 
@@ -14,11 +14,11 @@
                             <div class="px-4 sm:px-6 lg:px-8">
                                 <div class="sm:flex sm:items-center">
                                     <div class="sm:flex-auto">
-                                        <h1 class="text-base font-semibold leading-6 text-gray-900">Descuentos</h1>
+                                        <h1 class="text-base font-semibold leading-6 text-gray-900">Configuración</h1>
                                         <p class="mt-2 text-sm text-gray-300"></p>
                                     </div>
                                     <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-                                        <a href="{{ route('descuentos.create') }}" class="block rounded-md bg-indigo-500 px-3 py-2 text-center text-sm font-semibold text-white hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">Agregar descuento</a>
+                                        <a href="{{ route('settings.create') }}" class="block rounded-md bg-indigo-500 px-3 py-2 text-center text-sm font-semibold text-white hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">Agregar producto</a>
                                     </div>
                                 </div>
                                 <div class="mt-8 flow-root">
@@ -28,25 +28,24 @@
                                                 <thead>
                                                     <tr>
                                                         <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-0">ID</th>
-                                                        <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Nombre</th>
-                                                        <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Porcentaje</th>
-                                                        <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Fecha de Expiración</th>
+                                                        <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Nombre compañia</th>
+                                                        <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Logo</th>
                                                         <th scope="col" class="px-3 py-3.5 text-center text-sm font-semibold text-gray-900">Acciones</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody class="divide-y text-gray-900">
-                                                    @foreach ($descuentos as $descuento)
-                                                    <tr id="descuento-{{ $descuento->id }}">
-                                                        <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-white sm:pl-0">{{ $descuento->id }}</td>
-                                                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-900">{{ $descuento->name }}</td>
-                                                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-900">{{ $descuento->percentage }}%</td>
-                                                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-900">{{ $descuento->expiration }}</td>
+                                                    @foreach ($settings as $producto)
+                                                    <tr id="producto-{{ $producto->id }}">
+                                                        <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-white sm:pl-0">{{ $producto->id }}</td>
+                                                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-900">{{ $producto->name_company }}</td>
+                                                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-900">{{ $producto->logo_company }}</td>
+
                                                         <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-900">
                                                             <div class="flex justify-center">
-                                                                <a href="{{ route('descuentos.edit', $descuento->id) }}"
+                                                                <a href="{{ route('settings.edit', $producto->id) }}"
                                                                   class="block rounded-md bg-indigo-500 px-3 py-2 text-center text-sm font-semibold text-white hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">
                                                                   Editar</a>
-                                                                <button type="button" onclick="confirmDelete('{{ $descuento->id }}')" class="ml-4 inline-flex items-center rounded-md bg-red-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                                                                <button type="button" onclick="confirmDelete('{{ $producto->id }}')" class="ml-4 inline-flex items-center rounded-md bg-red-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
                                                                     Eliminar
                                                                 </button>
                                                             </div>
@@ -54,6 +53,7 @@
                                                     </tr>
                                                     @endforeach
                                                 </tbody>
+
                                             </table>
                                         </div>
                                     </div>
@@ -78,9 +78,9 @@
                                         </svg>
                                     </div>
                                     <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-                                        <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">Eliminar descuento</h3>
+                                        <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">Eliminar producto</h3>
                                         <div class="mt-2">
-                                            <p class="text-sm text-gray-500">¿Estás seguro que deseas eliminar este descuento? Esta acción no se puede deshacer.</p>
+                                            <p class="text-sm text-gray-500">¿Estás seguro que deseas eliminar este producto? Esta acción no se puede deshacer.</p>
                                         </div>
                                     </div>
                                 </div>
@@ -105,11 +105,11 @@
                                     </div>
                                     <div class="ml-3 w-0 flex-1 pt-0.5">
                                         <p class="text-sm font-medium text-gray-900">¡Eliminación exitosa!</p>
-                                        <p class="mt-1 text-sm text-gray-500">El descuento ha sido eliminado correctamente.</p>
+                                        <p class="mt-1 text-sm text-gray-500">El producto ha sido eliminado correctamente.</p>
                                     </div>
                                     <div class="ml-4 flex-shrink-0">
                                         <button type="button" class="-m-1.5 p-1.5 text-gray-500 hover:text-gray-900">
-                                            <span class="sr-only">Cerrar</span>
+                                            <span class="sr-only">Close</span>
                                             <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
                                                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                                             </svg>
@@ -123,31 +123,48 @@
             </div>
         </div>
     </div>
-
     <script>
-        function confirmDelete(id) {
-            document.getElementById('confirmationModal').classList.remove('hidden');
-            document.getElementById('confirmDeleteButton').onclick = function() {
-                axios.delete(`/descuentos/${id}`).then(response => {
-                    document.getElementById(`descuento-${id}`).remove();
-                    showSuccessNotification();
-                    closeModal();
-                }).catch(error => {
-                    console.error('Error al eliminar:', error);
-                });
-            };
-        }
+      function confirmDelete(id) {
+          document.getElementById('confirmationModal').classList.remove('hidden');
+          document.getElementById('confirmDeleteButton').onclick = function () {
+              deleteProduct(id);
+          };
+      }
 
-        function closeModal() {
-            document.getElementById('confirmationModal').classList.add('hidden');
-        }
+      function closeModal() {
+          document.getElementById('confirmationModal').classList.add('hidden');
+      }
 
-        function showSuccessNotification() {
-            const notification = document.getElementById('successNotification');
-            notification.classList.remove('hidden');
-            setTimeout(() => {
-                notification.classList.add('hidden');
-            }, 3000);
-        }
-    </script>
+      function deleteProduct(id) {
+          fetch(`/settings/${id}`, {
+              method: 'DELETE',
+              headers: {
+                  'Content-Type': 'application/json',
+                  'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+              },
+              body: JSON.stringify({ _method: 'DELETE' }),
+          })
+          .then(response => response.json())
+          .then(data => {
+              if (data.success) {
+                  // Actualizar la tabla
+                  document.querySelector(`#producto-${id}`).remove();
+
+                  // Mostrar notificación de éxito
+                  document.getElementById('successNotification').classList.remove('hidden');
+                  setTimeout(() => {
+                      document.getElementById('successNotification').classList.add('hidden');
+                  }, 3000);
+              } else {
+                  // Manejo de error si es necesario
+              }
+              closeModal();
+          })
+          .catch(error => {
+              console.error('Error:', error);
+              closeModal();
+          });
+      }
+  </script>
+
 </x-app-layout>
