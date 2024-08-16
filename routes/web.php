@@ -10,11 +10,8 @@ use App\Http\Controllers\DevolucionController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\NavigationController;
 use App\Http\Controllers\ReportController;
-
-use Spatie\Permission\Models\Role;
-
-
 // Ruta para que ChartController sea la página de inicio
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -24,39 +21,35 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
-    // Rutas para el dashboard (administrador y gerente)
-    Route::get('/chart', [ChartController::class, 'index'])->name('dashboard.index')->middleware('role:administrador|gerente');
+    Route::get('/chart', function () {
+        return view('dashboard.index');
+    })->name('chart');
 
-    // Rutas para productos (administrador, gerente y cajero)
-    Route::resource('productos', ProductoController::class)->middleware('role:administrador|gerente|cajero');
+    Route::resource('productos', ProductoController::class);//administrador, gerente y cajero
+    Route::resource('categorias', CategoriaController::class);//administrador y gerente
+    Route::resource('descuentos', DescuentoController::class); //administrador
+    Route::resource('devoluciones', DevolucionController::class); //administrador y gerente
+    Route::resource('settings', SettingController::class); //administrador
+    Route::post('/settings', [SettingController::class, 'store'])->name('settings.store'); //administrador
+    Route::get('/navigation-menu', [NavigationController::class, 'show']); //administrador
+    Route::get('/reportes/ventas', [ReportController::class, 'showVentasForm'])->name('reportes.ventas.form'); //administrador y gerente
+    Route::get('/reportes/ventas/pdf', [ReportController::class, 'exportVentasPdf'])->name('reportes.ventas.pdf'); //administrador y gerente
+    Route::get('/reportes/inventario/pdf', [ReportController::class, 'exportInventarioPdf'])->name('reportes.inventario.pdf'); //administrador y gerente
 
-    // Rutas para categorías (administrador y gerente)
-    Route::resource('categorias', CategoriaController::class)->middleware('role:administrador|gerente');
 
-    // Rutas para descuentos (administrador)
-    Route::resource('descuentos', DescuentoController::class)->middleware('role:administrador');
 
-    // Rutas para devoluciones (administrador y gerente)
-    Route::resource('devoluciones', DevolucionController::class)->middleware('role:administrador|gerente');
+    Route::get('/chart', [ChartController::class, 'index'])->name('dashboard.index'); //administrador y gerente
 
-    // Rutas para configuración (administrador)
-    Route::resource('settings', SettingController::class)->middleware('role:administrador');
-    Route::post('/settings', [SettingController::class, 'store'])->name('settings.store')->middleware('role:administrador');
+    // Ruta para la búsqueda del producto por SKU
+    Route::get('/pos/search', [PosController::class, 'searchProduct'])->name('pos.search'); //administradoor, gerente y cajero
 
-    // Ruta para mostrar el menú de navegación (administrador)
-    Route::get('/navigation-menu', [NavigationController::class, 'show'])->middleware('role:administrador');
+    // Ruta para la vista del punto de venta
+    Route::get('/pos', [PosController::class, 'index'])->name('pos.index'); //administrador, gerente y cajero
 
-    // Rutas para reportes (administrador y gerente)
-    Route::get('/reportes/ventas', [ReportController::class, 'showVentasForm'])->name('reportes.ventas.form')->middleware('role:administrador|gerente');
-    Route::get('/reportes/ventas/pdf', [ReportController::class, 'exportVentasPdf'])->name('reportes.ventas.pdf')->middleware('role:administrador|gerente');
-    Route::get('/reportes/inventario/pdf', [ReportController::class, 'exportInventarioPdf'])->name('reportes.inventario.pdf')->middleware('role:administrador|gerente');
+    // Ruta para mostrar un producto específico
+    Route::get('/pos/{id}', [PosController::class, 'show'])->name('pos.show'); //administrador, gerente y cajero
+    Route::post('pos/add-product-to-cart', [PosController::class, 'addProductToCart'])->name('pos.addProductToCart'); //administrador, gerente y cajero
+    Route::post('pos/complete-sale', [PosController::class, 'completeSale'])->name('pos.completeSale'); //administradoor, gerente y cajero
+    Route::get('/company-name', [PosController::class, 'companyName']); //administrador
 
-    // Rutas para el punto de venta (administrador, gerente y cajero)
-    Route::get('/pos/search', [PosController::class, 'searchProduct'])->name('pos.search')->middleware('role:administrador|gerente|cajero');
-    Route::get('/pos', [PosController::class, 'index'])->name('pos.index')->middleware('role:administrador|gerente|cajero');
-    Route::get('/pos/{id}', [PosController::class, 'show'])->name('pos.show')->middleware('role:administrador|gerente|cajero');
-    Route::post('pos/add-product-to-cart', [PosController::class, 'addProductToCart'])->name('pos.addProductToCart')->middleware('role:administrador|gerente|cajero');
-    Route::post('pos/complete-sale', [PosController::class, 'completeSale'])->name('pos.completeSale')->middleware('role:administrador|gerente|cajero');
-    Route::get('/company-name', [PosController::class, 'companyName'])->middleware('role:administrador');
 });
-

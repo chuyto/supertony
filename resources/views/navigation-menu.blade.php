@@ -192,11 +192,6 @@
                             </x-dropdown-link>
                             @endhasanyrole
 
-                            @hasanyrole('administrador')
-                            <x-dropdown-link href="{{ route('users.index') }}">
-                                {{ __('Usuarios') }}
-                            </x-dropdown-link>
-                            @endhasanyrole
 
                             @if (Laravel\Jetstream\Jetstream::hasApiFeatures())
                                 <x-dropdown-link href="{{ route('api-tokens.index') }}">
