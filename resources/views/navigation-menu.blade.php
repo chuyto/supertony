@@ -187,6 +187,12 @@
                                 {{ __('Profile') }}
                             </x-dropdown-link>
                             @hasanyrole('administrador')
+                            <x-dropdown-link href="{{ route('users.index') }}">
+                                {{ __('Users') }}
+                            </x-dropdown-link>
+                            @endhasanyrole
+
+                            @hasanyrole('administrador')
                             <x-dropdown-link href="{{ route('settings.index') }}">
                                 {{ __('Configuración') }}
                             </x-dropdown-link>

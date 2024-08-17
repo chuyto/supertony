@@ -5,8 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Descuento;
 
-class DescuentoController extends Controller
-{
+class DescuentoController extends Controller{
     public function index()
     {
         $descuentos = Descuento::all();
@@ -60,16 +59,17 @@ class DescuentoController extends Controller
         $descuento->name = $request->input('name');
         $descuento->percentage = $request->input('percentage');
         $descuento->expiration = $request->input('expiration');
-        $descuento->is_active = $request->has('is_active'); // Si el checkbox está marcado, se establece en true, de lo contrario, false.
-        $descuento->save();
+        $descuento->is_active = $request->has('is_active'); // Si el checkbox está marcado, se establece en true, de lo contrario, false.$descuento->save();
 
         return redirect()->route('descuentos.index')->with('success', 'Descuento actualizado con éxito.');
     }
 
-
-    public function destroy(Descuento $descuento)
+    // Este método maneja la eliminación de un descuento y redirige a la lista de descuentospublic
+    function destroy($id)
     {
+        $descuento = Descuento::findOrFail($id);
         $descuento->delete();
-        return redirect()->route('descuentos.index')->with('success', 'Descuento eliminado con éxito.');
+
+        return redirect()->route('descuentos.index')->with('success', 'Descuento eliminado correctamente.');
     }
 }

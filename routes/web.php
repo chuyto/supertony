@@ -10,6 +10,7 @@ use App\Http\Controllers\DevolucionController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\NavigationController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\UserController;
 // Ruta para que ChartController sea la página de inicio
 
 Route::get('/', function () {
@@ -35,8 +36,13 @@ Route::middleware([
     Route::get('/reportes/ventas', [ReportController::class, 'showVentasForm'])->name('reportes.ventas.form'); //administrador y gerente
     Route::get('/reportes/ventas/pdf', [ReportController::class, 'exportVentasPdf'])->name('reportes.ventas.pdf'); //administrador y gerente
     Route::get('/reportes/inventario/pdf', [ReportController::class, 'exportInventarioPdf'])->name('reportes.inventario.pdf'); //administrador y gerente
-
-
+    Route::resource('users', UserController::class); //administrador
+    Route::get('/descuentos', [DescuentoController::class, 'index'])->name('descuentos.index');
+    Route::get('/descuentos/create', [DescuentoController::class, 'create'])->name('descuentos.create');
+    Route::post('/descuentos', [DescuentoController::class, 'store'])->name('descuentos.store');
+    Route::get('/descuentos/{id}/edit', [DescuentoController::class, 'edit'])->name('descuentos.edit');
+    Route::put('/descuentos/{id}', [DescuentoController::class, 'update'])->name('descuentos.update');
+    Route::get('/descuentos/{id}/delete', [DescuentoController::class, 'destroy'])->name('descuentos.delete');
 
     Route::get('/chart', [ChartController::class, 'index'])->name('dashboard.index'); //administrador y gerente
 

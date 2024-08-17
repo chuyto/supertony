@@ -66,7 +66,6 @@
 
                                     <button type="submit" class="mt-4 bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600">Finalizar Compra</button>
                                 </form>
-
                             </div>
                         </div>
                     </div>
@@ -152,15 +151,33 @@
             row.innerHTML = `
                 <td>${item.name}</td>
                 <td>$${item.price.toFixed(2)}</td>
-                <td>${item.quantity}</td>
+                <td><input type="number" min="1" class="quantity-input" data-id="${item.id}" value="${item.quantity}" /></td>
                 <td>
                     <button class="bg-red-500 text-white px-2 py-1 rounded" onclick="removeFromCart(${item.id})">Eliminar</button>
                 </td>
             `;
         });
 
-        document.getElementById('cart-items').value = JSON.stringify(cart);
-        updateCartTotals();
+        document.querySelectorAll('.quantity-input').forEach(input => {
+                input.addEventListener('input', function() {
+                    let id = parseInt(this.getAttribute('data-id'));
+                    let newQuantity = parseInt(this.value);
+                    updateItemQuantity(id, newQuantity);
+                });
+            });
+
+            document.getElementById('cart-items').value = JSON.stringify(cart);
+            updateCartTotals();
+    }
+
+    function updateItemQuantity(id, quantity) {
+        let item = cart.find(item => item.id === id);
+        if (item) {
+            item.quantity = quantity;
+            item.total = item.price * item.quantity * (1 - item.discount / 100);
+            updateCartTable();
+            updateCartTotals();
+        }
     }
 
     function updateCartTotals() {
@@ -258,56 +275,62 @@
             alertDiv.remove();
         }, 3000);
     }
+
     function printReceipt(receipt, amountPaid) {
-    if (!receipt || !receipt.items) {
-        console.error('Recibo inválido o sin items');
-        return;
+        if (!receipt || !receipt.items) {
+            console.error('Recibo inválido o sin items');
+            return;
+        }
+
+        // Verificar el tipo y valor de name_company en el frontend
+        console.log('Tipo de name_company:', typeof receipt.name_company);
+        console.log('Valor de name_company:', receipt.name_company);
+
+        let companyName = receipt.name_company;
+        if (typeof companyName !== 'string') {
+            console.error('El nombre de la compañía no es una cadena de texto');
+            return;
+        }
+
+        let subtotal = receipt.items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+        let totalDiscounts = receipt.items.reduce((sum, item) => sum + (item.price * item.quantity * (item.discount / 100)), 0);
+        let total = subtotal - totalDiscounts;
+
+        if (isNaN(subtotal) || isNaN(totalDiscounts) || isNaN(total)) {
+            console.error('Valores de recibo no son números válidos');
+            return;
+        }
+
+        let printWindow = window.open('', '', 'height=400,width=600');
+        if (!printWindow) {
+            console.error('No se pudo abrir la ventana de impresión');
+            return;
+        }
+
+        printWindow.document.open();
+        printWindow.document.write('<html><head><title>Ticket de Compra</title>');
+        printWindow.document.write('<style>body{font-family: Arial, sans-serif;} table{width: 100%; border-collapse: collapse;} th, td{border: 1px solid #000; padding: 8px; text-align: left;} th{background-color: #f2f2f2;} </style>');
+        printWindow.document.write('</head><body>');
+        // printWindow.document.write('Nombre de la Compañía: ' + companyName);
+        printWindow.document.write('<h1>Recibo</h1>');
+        printWindow.document.write('<table><thead><tr><th>Producto</th><th>Precio</th><th>Cantidad</th><th>Descuento</th><th>Total</th></tr></thead><tbody>');
+
+        receipt.items.forEach(item => {
+            let itemTotal = item.price * item.quantity;
+            let itemDiscount = itemTotal * (item.discount / 100);
+            printWindow.document.write(`<tr><td>${item.name}</td><td>$${item.price.toFixed(2)}</td><td>${item.quantity}</td><td>$${itemDiscount.toFixed(2)}</td><td>$${(itemTotal - itemDiscount).toFixed(2)}</td></tr>`);
+        });
+
+        printWindow.document.write('</tbody></table>');
+        printWindow.document.write('<h2>Subtotal: $' + subtotal.toFixed(2) + '</h2>');
+        printWindow.document.write('<h2>Descuentos: $' + totalDiscounts.toFixed(2) + '</h2>');
+        printWindow.document.write('<h2>Total: $' + total.toFixed(2) + '</h2>');
+        printWindow.document.write('<h2>Pago: $' + amountPaid.toFixed(2) + '</h2>');
+        printWindow.document.write('<h2>Cambio: $' + (amountPaid - total).toFixed(2) + '</h2>');
+        printWindow.document.write('</body></html>');
+        printWindow.document.close();
+        printWindow.focus();  // Asegúrate de que la ventana de impresión está en foco
+        printWindow.print();
     }
-
-    // Verificar el tipo y valor de name_company en el frontend
-    console.log('Tipo de name_company:', typeof receipt.name_company);
-    console.log('Valor de name_company:', receipt.name_company);
-
-    let companyName = receipt.name_company;
-    if (typeof companyName !== 'string') {
-        console.error('El nombre de la compañía no es una cadena de texto');
-        return;
-    }
-
-    let subtotal = receipt.items.reduce((sum, item) => sum + item.price * item.quantity, 0);
-    let totalDiscounts = receipt.items.reduce((sum, item) => sum + (item.price * item.quantity * (item.discount / 100)), 0);
-    let total = subtotal - totalDiscounts;
-
-    if (isNaN(subtotal) || isNaN(totalDiscounts) || isNaN(total)) {
-        console.error('Valores de recibo no son números válidos');
-        return;
-    }
-
-    let printWindow = window.open('', '', 'height=400,width=600');
-    printWindow.document.write('<html><head><title>Ticket de Compra</title>');
-    printWindow.document.write('<style>body{font-family: Arial, sans-serif;} table{width: 100%; border-collapse: collapse;} th, td{border: 1px solid #000; padding: 8px; text-align: left;} th{background-color: #f2f2f2;} </style>');
-    printWindow.document.write('</head><body>');
-    printWindow.document.write('Nombre de la Compañía: ' + companyName);
-    printWindow.document.write('<h1>Recibo</h1>');
-    printWindow.document.write('<table><thead><tr><th>Producto</th><th>Precio</th><th>Cantidad</th><th>Descuento</th><th>Total</th></tr></thead><tbody>');
-
-    receipt.items.forEach(item => {
-        let itemTotal = item.price * item.quantity;
-        let itemDiscount = itemTotal * (item.discount / 100);
-        printWindow.document.write(`<tr><td>${item.name}</td><td>$${item.price.toFixed(2)}</td><td>${item.quantity}</td><td>$${itemDiscount.toFixed(2)}</td><td>$${(itemTotal - itemDiscount).toFixed(2)}</td></tr>`);
-    });
-
-    printWindow.document.write('</tbody></table>');
-    printWindow.document.write('<h2>Subtotal: $' + subtotal.toFixed(2) + '</h2>');
-    printWindow.document.write('<h2>Descuentos: $' + totalDiscounts.toFixed(2) + '</h2>');
-    printWindow.document.write('<h2>Total: $' + total.toFixed(2) + '</h2>');
-    printWindow.document.write('<h2>Pago: $' + amountPaid.toFixed(2) + '</h2>');
-    printWindow.document.write('<h2>Cambio: $' + (amountPaid - total).toFixed(2) + '</h2>');
-    printWindow.document.write('</body></html>');
-    printWindow.document.close();
-    printWindow.print();
-}
-
-
 });
 </script>

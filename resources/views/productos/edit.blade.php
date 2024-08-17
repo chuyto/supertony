@@ -77,15 +77,16 @@
                                         @error('sku') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                                     </div>
                                 </div>
+                                <input type="hidden" name="image" id="image" value="{{ old('image', $producto->image ?? 'valor_por_defecto') }}">
 
                                 <!-- Image -->
-                                <div>
+                                {{-- <div>
                                     <label for="image" class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-200">Imagen</label>
                                     <div class="mt-2">
                                         <input type="text" name="image" id="image" value="{{ old('image', $producto->image) }}" class="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-700 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" placeholder="Imagen">
                                         @error('image') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                                     </div>
-                                </div>
+                                </div> --}}
                             </div>
 
                             <!-- Discount -->
